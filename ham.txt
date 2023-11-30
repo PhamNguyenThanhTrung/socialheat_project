@@ -1,0 +1,21 @@
+tạo 1 migration mới :
+php spark migrate:create TenMigration
+
+Sau khi bạn đã định nghĩa migration, sử dụng lệnh sau để thực hiện migration và cập nhật cơ sở dữ liệu:
+php spark migrate
+
+Nếu bạn muốn rollback migration, sử dụng lệnh:
+php spark migrate:rollback
+
+php spark help migrate
+
+cần mở ";extension=intl" thành "extension=intl" trong tệp php.ini vì khi tạo migration thì sẽ tạo theo ngày quốc tế 
+
+*NOTE* "Extension intl cung cấp các tính năng liên quan đến định dạng ngày tháng, ngôn ngữ, kiểm tra và so sánh chuỗi dựa trên địa phương,
+và nó được sử dụng trong các tình huống liên quan đến quốc tế hóa ứng dụng. Một số thư viện và framework PHP như CodeIgniter 4 có thể sử
+dụng extension này để hỗ trợ các tính năng này.
+Một số lập trình viên không cần sử dụng extension intl trong các ứng dụng của họ và có thể tắt nó. Tuy nhiên, nếu bạn gặp lỗi liên quan 
+đến lớp 'Locale' hoặc cần sử dụng các tính năng định dạng ngày tháng và ngôn ngữ quốc tế, bạn cần bật extension intl trong cài đặt PHP 
+của mình."
+
+public $baseURL = 'http://localhost/codeigniter4-project/'; // Điều này phụ thuộc vào đường dẫn của trang web trên máy của bạn
