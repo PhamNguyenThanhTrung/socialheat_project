@@ -101,9 +101,7 @@ function toggleDescription() {
         </div>
 
         <!-- Call to Action-->
-        <div class="card text-white bg-secondary my-5 py-4 text-center">
-            <div class="card-body"><p class="text-white m-0">This call to action card is a great place to showcase some important information or display a clever tagline!</p></div>
-        </div>
+     
         <div class="card container p-4 my-4 " id="productDetailsContainer">
     <div class="row ">
         <h3 class="bg-warning">Product Information:</h3>

@@ -9,6 +9,8 @@ use CodeIgniter\Database\Config;
  */
 class Database extends Config
 {
+    public $queryRunner = '\CodeIgniter\Database\Query';
+
     /**
      * The directory that holds the Migrations
      * and Seeds directories.

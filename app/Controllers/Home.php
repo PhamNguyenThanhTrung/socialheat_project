@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\ProductModel;
-// Tạo biến chứa thông tin phiên bản
 
 class Home extends BaseController
 {
-    
+
     public function index(): string
     {
         return view('welcome_message');
     }
     public function viewproductImport(): string
     {
-        
+
         return view('pages/productImport');
     }
     public function viewProduct(): string
@@ -28,39 +28,31 @@ class Home extends BaseController
     public function adminList(): string
     {
         $data['codeigniter_version'] = defined('CI_VERSION') ? CI_VERSION : 'CodeIgniter không được cài đặt.';
-
-// Truyền biến vào view
-
-
         return view('pages/adminList', $data);
     }
     public function viewDashboard(): string
-{
-    $productModel = new ProductModel();
-    $data['products'] = $productModel->findAll();
+    {
+        $productModel = new ProductModel();
+        $perPage = 10; 
+        $data['products'] = $productModel->paginate($perPage);
 
-    // Tính tổng giá trị cột 'supplier'
-    $totalSupplier = 0;
-    foreach ($data['products'] as $product) {
-        // Kiểm tra xem giá trị của cột 'supplier' có tồn tại không
-        if (isset($product['supplier']) && $product['supplier'] !== null) {
-            $totalSupplier += $product['supplier'];
+   
+        $pager = $productModel->pager;
+        $data['pager'] = $pager;
+        $totalSupplier = 0;
+        foreach ($data['products'] as $product) { 
+            if (isset($product['supplier']) && $product['supplier'] !== null) {
+                $totalSupplier += $product['supplier'];
+            }
         }
-    }
-    foreach ($data['products'] as $product) {
-      
-        if (isset($product['supplier']) && $product['supplier'] !== null) {
-            $totalSupplier += $product['supplier'];
-        }
+        $data['totalSupplier'] = $totalSupplier;
+        $data['totalProducts'] = $pager->getDetails()['total'];
+
+        return view('pages/dashboard', $data);
     }
 
-    $data['totalSupplier'] = $totalSupplier;
-    $data['totalProducts'] = count($data['products']);
-    return view('pages/dashboard', $data);
-}
 
-    
-    
+
     public function productExport(): string
     {
         return view('pages/productExport');
@@ -81,13 +73,9 @@ class Home extends BaseController
     {
         return view('pages/supplier');
     }
-   
+
     public function admin(): string
     {
         return view('layout/admin');
     }
-    
 }
-
-
-

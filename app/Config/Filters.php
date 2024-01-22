@@ -37,14 +37,14 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            // 'auth',
+             'auth',
              // Thêm 'auth' vào đây để kích hoạt AuthFilter trước mỗi request
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
-        ],        
+        ],
         'after' => [
-            'toolbar',
+//            'toolbar',
             // 'honeypot',
             // 'secureheaders',
         ],
@@ -71,8 +71,8 @@ class Filters extends BaseConfig
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
    // Trong app/Filters.php
-public array $filters = [
-    'auth' => ['before' => ['dashboard']],
-];
+    // Trong file Filters.php
+    public $filters = [];
+
 
 }

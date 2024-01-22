@@ -17,7 +17,7 @@
 
 <div class="container1">
 
-<form action="/public/upload" method="post" enctype="multipart/form-data">
+<form action="/upload" method="post" enctype="multipart/form-data">
     <div class="container bg-light pt-4 py-3 justify-content-center " style="width:600px ">
         <div class="dropdown bg-white container border">
             <button class="btn btn-white dropdown-toggle container " type="button" data-bs-toggle="dropdown"

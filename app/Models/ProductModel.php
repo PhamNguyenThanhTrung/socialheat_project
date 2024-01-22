@@ -72,6 +72,29 @@ class ProductModel extends Model
     protected $afterDelete    = [];
     public function getProductDetails($productId)
     {
+
         return $this->find($productId);
     }
+    public function getUniqueCategories($isSubCategory = false)
+    {
+        $cacheKey = $isSubCategory ? 'unique_subcategories' : 'unique_categories';
+        $cachedResult = cache($cacheKey);
+    
+        if ($cachedResult === null) {
+            $columnName = $isSubCategory ? 'sub_category' : 'category';
+            $query = $this->query("SELECT DISTINCT $columnName FROM tbl_product_acme");
+            $result = $query->getResultArray();
+            cache()->save($cacheKey, $result, 3600); // Lưu kết quả vào cache trong 1 giờ
+        } else {
+            $result = $cachedResult;
+        }
+    
+        return $result;
+    }
+    
+    
+    
+    
+    
+    
 }

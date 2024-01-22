@@ -117,12 +117,7 @@
         aria-expanded="false">
         Category
     </button>
-    <div  class="dropdown-menu " aria-labelledby="categoryDropdownButton">
-        <?php foreach ($uniqueCategories as $categoryItem): ?>
-            <a class="dropdown-item" href="#"
-                onclick="handleCategoryDropdownSelection('<?= $categoryItem['category'] ?>')"><?= $categoryItem['category'] ?></a>
-        <?php endforeach; ?>
-    </div>
+  
 </div>
 
 
@@ -142,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-7 ">
+                <div class="col-lg-7 " >
     entries <span class="text-secondary">
     <?php if (isset($pager) && is_array($pager->getDetails())) : ?>
         <?= $pager->getDetails()['currentPageStart'] ?? '' ?>-
@@ -159,7 +154,7 @@
 <!-- Nút chuyển trang -->
 <!-- Nút chuyển trang -->
 <!-- Nút chuyển trang -->
-<div class="col-lg-6 py-5" style="padding-left: 45%;">
+<div class="col-lg-6 py-2" style="padding-left: 30%;">
     <nav aria-label="Page navigation">
         <?php if (isset($pager) && is_array($pager->getDetails())) : ?>
             <?= $pager->links() ?>
@@ -197,6 +192,7 @@
 
         </div>
     </div>
+    
 </div>
 <!-- Content Row -->
 <?= $this->endSection() ?>

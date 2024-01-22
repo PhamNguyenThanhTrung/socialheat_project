@@ -20,10 +20,20 @@
     border-radius: 50%;
 }
 </style>
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Product Manager</h1>
+<style>
+    .sticky-top {
+        position: sticky;
+        top: 0;
+        background-color: #EEEEEE; /* Adjust the background color as needed */
+        z-index: 1000; /* Adjust the z-index if needed */
+        border-bottom: 1px solid #ddd; /* Add a border if needed */
+    }
+</style>
 
+<div class="d-sm-flex align-items-center justify-content-between mb-4 sticky-top">
+    <h1 class="h3 mb-0 text-gray-800">Product Manager</h1>
 </div>
+
 
 <!-- <div class="hew bg-light text-dark container" style="min-width: 100%; overflow-x: auto;">
     <nav class="hew bg-light text-dark container-fluid" style="min-width: 600px; overflow-x: auto;"> -->
@@ -40,27 +50,54 @@
         }
         </style>
 
-        <!-- Sidebar Toggle (Topbar) -->
-        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 ">
-            <i class="fa fa-bars"></i>
-        </button>
-
+  
         <div class="">
-            <!-- Các phần tử con của phần tử sẽ sử dụng flexbox layout -->
-
+       
             <div class="row">
             <div class="col-md-3">
     <!-- Topbar Search -->
-    <form class="d-flex mb-3 mb-md-0" method="get" action="<?= base_url('product') ?>">
-        <div class="input-group">
-            <input type="text" class="form-control border-0 small" placeholder="Search Code/Name..." aria-label="Search" aria-describedby="basic-addon2" name="searchItem" value="<?= $searchName ?? '' ?>">
-            <div class="input-group-append">
+    <script>
+    function handleSearchInputChange() {
+        // Lấy giá trị của trường searchItem
+        var searchValue = document.getElementsByName('searchItem')[0].value;
+
+        // Lấy URL hiện tại của trang
+        var currentUrl = window.location.href;
+
+        // Tạo một đối tượng URL từ URL hiện tại
+        var urlObject = new URL(currentUrl);
+
+        // Xóa tham số searchItem hiện tại trong URL
+        urlObject.searchParams.delete('searchItem');
+
+        // Nếu giá trị mới của searchItem khác null hoặc undefined, thêm giá trị mới vào URL
+        if (searchValue.trim() !== '') {
+            urlObject.searchParams.append('searchItem', encodeURIComponent(searchValue));
+        }
+
+        // Chuyển hướng trang đến URL mới
+        window.location.href = urlObject.href;
+    }
+
+    function handleSearchFormSubmit() {
+        // Tránh chuyển hướng mặc định của form và thực hiện chuyển hướng theo ý muốn
+        handleSearchInputChange();
+        return false;
+    }
+</script>
+
+<!-- Search Form -->
+<form class="d-flex mb-3 mb-md-0" method="get" action="<?= base_url('product') ?>" onsubmit="return handleSearchFormSubmit()">
+    <div class="input-group">
+        <input type="text" class="form-control border-0 small" placeholder="Search Code/Name..." aria-label="Search" aria-describedby="basic-addon2" name="searchItem" value="<?= $searchName ?? '' ?>" oninput="handleSearchInputChange()">
+        <div class="input-group-append">
             <button class="btn btn-outline-secondary border-0 bg-white" type="submit">
-                                    <i class="bi bi-search border-0"></i>
-                                </button>
-            </div>
+                <i class="bi bi-search border-0"></i>
+            </button>
         </div>
-    </form>
+    </div>
+</form>
+
 </div>
 
 
@@ -73,9 +110,13 @@
     <!-- Ô tìm kiếm sử dụng Select2 -->
     <select class="form-select border-0" id="categoryDropdownButton" name="category" onchange="handleSubCategoryDropdownSelection1(this.value)">
         <option selected disabled>sub_category</option>
-        <?php foreach ($uniqueSubCategories as $categoryItem): ?>
-            <option value="<?= $categoryItem['sub_category'] ?>"><?= $categoryItem['sub_category'] ?></option>
-        <?php endforeach; ?>
+   <?php foreach ($uniqueSubCategories as $categoryItem): ?>
+    <?php $categoryArray = (array)$categoryItem; ?>
+    <option value="<?= $categoryArray['sub_category'] ?>"><?= $categoryArray['sub_category'] ?></option>
+<?php endforeach; ?>
+
+
+
     </select>
 </div>
 
@@ -86,17 +127,33 @@
                 <script>
                 // Hàm xử lý khi một mục trong dropdown sub_category được chọn
                 function handleSubCategoryDropdownSelection1(value) {
-                    var currentUrl = window.location.href;
-                    var separator = currentUrl.includes('?') ? '&' : '?';
-                    var newUrl = currentUrl + separator + 'sub_category=' + encodeURIComponent(value);
-                    window.location.href = newUrl;
-                }
-                function handleCategoryDropdownSelection1(value) {
-                    var currentUrl = window.location.href;
-                    var separator = currentUrl.includes('?') ? '&' : '?';
-                    var newUrl = currentUrl + separator + 'category=' + encodeURIComponent(value);
-                    window.location.href = newUrl;
-                }
+    var currentUrl = window.location.href;
+    var urlObject = new URL(currentUrl);
+
+    // Xóa tất cả các tham số sub_category hiện tại trong URL
+    urlObject.searchParams.delete('sub_category');
+
+    // Thêm giá trị mới của sub_category vào URL
+    urlObject.searchParams.append('sub_category', encodeURIComponent(value));
+
+    console.log("New URL:", urlObject.href);
+
+    window.location.href = urlObject.href;
+}
+
+function handleCategoryDropdownSelection1(value) {
+    var currentUrl = window.location.href;
+    var urlObject = new URL(currentUrl);
+
+    // Xóa tất cả các tham số category hiện tại trong URL
+    urlObject.searchParams.delete('category');
+
+    // Thêm giá trị mới của category vào URL
+    urlObject.searchParams.append('category', encodeURIComponent(value));
+
+    window.location.href = urlObject.href;
+}
+
                 </script>
 
 
@@ -106,11 +163,18 @@
                     <script>
                     // Hàm xử lý khi một mục trong dropdown nhà cung cấp được chọn
                     function handleVendorDropdownSelection(value) {
-                        var currentUrl = window.location.href;
-                        var separator = currentUrl.includes('?') ? '&' : '?';
-                        var newUrl = currentUrl + separator + 'vendor=' + encodeURIComponent(value);
-                        window.location.href = newUrl;
-                    }
+    var currentUrl = window.location.href;
+    var urlObject = new URL(currentUrl);
+
+    // Xóa tất cả các tham số vendor hiện tại trong URL
+    urlObject.searchParams.delete('vendor');
+
+    // Thêm giá trị mới của vendor vào URL
+    urlObject.searchParams.append('vendor', encodeURIComponent(value));
+
+    window.location.href = urlObject.href;
+}
+
                     </script>
 
                     <!-- Thêm dropdown nhà cung cấp vào view -->
@@ -152,8 +216,11 @@
                         onchange="handleCategoryDropdownSelection1(this.value)">
                         <option hidden value="category" selected >Category</option>
                         <?php foreach ($uniqueCategories as $categoryItem): ?>
-                        <option value="<?= $categoryItem['category'] ?>"><?= $categoryItem['category'] ?></option>
-                        <?php endforeach; ?>
+    <?php $categoryArray = (array)$categoryItem; ?>
+    <option value="<?= $categoryArray['category'] ?>"><?= $categoryArray['category'] ?></option>
+<?php endforeach; ?>
+
+
                     </select>
                 </div>
 
@@ -173,48 +240,146 @@
         
         <div class="row">
     <div class="col-md-6">
+    <script>
+    function handlePriceInputChange() {
+        // Lấy giá trị của các trường price_from và price_to
+        var priceFromValue = document.getElementsByName('price_from')[0].value;
+        var priceToValue = document.getElementsByName('price_to')[0].value;
+
+        // Lấy URL hiện tại của trang
+        var currentUrl = window.location.href;
+
+        // Tạo một đối tượng URL từ URL hiện tại
+        var urlObject = new URL(currentUrl);
+
+        // Xóa tất cả các tham số price hiện tại trong URL
+        urlObject.searchParams.delete('price_from');
+        urlObject.searchParams.delete('price_to');
+
+        // Nếu giá trị mới của price_from khác null hoặc undefined, thêm giá trị mới vào URL
+        if (priceFromValue.trim() !== '') {
+            urlObject.searchParams.append('price_from', encodeURIComponent(priceFromValue));
+        }
+
+        // Nếu giá trị mới của price_to khác null hoặc undefined, thêm giá trị mới vào URL
+        if (priceToValue.trim() !== '') {
+            urlObject.searchParams.append('price_to', encodeURIComponent(priceToValue));
+        }
+
+        // Chuyển hướng trang đến URL mới
+        window.location.href = urlObject.href;
+    }
+
+    function handleFormSubmit() {
+        // Tránh chuyển hướng mặc định của form và thực hiện chuyển hướng theo ý muốn
+        handlePriceInputChange();
+        return false;
+    }
+</script>
+
         <!-- Price Filter Form -->
-        <form class="d-flex flex-column flex-md-row mb-3" method="get" action="<?= base_url('product') ?>">
-            <div class="form-group mb-2">
-                <label class="py-2 pr-4 text-secondary">Price :</label>
-            </div>
-            <div class="form-group mb-2">
-                <input type="text" class="form-control bg-white border-0" placeholder="From" name="price_from" value="<?= $priceFrom ?>">
-            </div>
-            <div class="form-group mb-2">
-                <h5 class="py-2 pr-4 text-secondary">-</h5>
-            </div>
-            <div class="form-group mb-2">
-                <input type="text" class="form-control bg-white border-0" placeholder="To" name="price_to" value="<?= $priceTo ?>">
-            </div>
-            <button type="submit" hidden class="btn btn-primary ml-md-2">Filter</button>
-        </form>
+      <!-- Price Filter Form -->
+<form class="d-flex flex-column flex-md-row mb-3" method="get" action="<?= base_url('product') ?>">
+    <div class="form-group mb-2">
+        <label class="py-2 pr-4 text-secondary">Price :</label>
+    </div>
+    <div class="form-group mb-2">
+        <input type="text" class="form-control bg-white border-0" placeholder="From" name="price_from" value="<?= $priceFrom ?>">
+    </div>
+    <div class="form-group mb-2">
+        <h5 class="py-2 pr-4 text-secondary">-</h5>
+    </div>
+    <div class="form-group mb-2">
+        <input type="text" class="form-control bg-white border-0" placeholder="To" name="price_to" value="<?= $priceTo ?>" onchange="handlePriceInputChange()">
+    </div>
+    <button type="submit" hidden class="btn btn-primary ml-md-2">Filter</button>
+</form>
+
+   
     </div>
 
     <div class="col-md-6">
         <!-- Stock Filter Form -->
-        <form class="d-flex flex-column flex-md-row mb-3" method="get" action="<?= base_url('product') ?>">
-            <div class="form-group mb-2">
-                <label class="py-2 pr-4 text-secondary">Stock :</label>
-            </div>
-            <div class="form-group mb-2">
-                <input type="text" class="form-control bg-white border-0" placeholder="From" name="Stock_from" value="<?= $StockFrom ?>">
-            </div>
-            <div class="form-group mb-2">
-                <h5 class="py-2 pr-4 text-secondary">-</h5>
-            </div>
-            <div class="form-group mb-2">
-                <input type="text" class="form-control bg-white border-0" placeholder="To" name="Stock_to" value="<?= $StockTo ?>">
-            </div>
-            <button type="submit" hidden class="btn btn-primary ml-md-2">Filter</button>
-        </form>
+        <script>
+    function handleStockInputChange() {
+        // Lấy giá trị của các trường Stock_from và Stock_to
+        var stockFromValue = document.getElementsByName('Stock_from')[0].value;
+        var stockToValue = document.getElementsByName('Stock_to')[0].value;
+
+        // Lấy URL hiện tại của trang
+        var currentUrl = window.location.href;
+
+        // Tạo một đối tượng URL từ URL hiện tại
+        var urlObject = new URL(currentUrl);
+
+        // Xóa tất cả các tham số Stock hiện tại trong URL
+        urlObject.searchParams.delete('Stock_from');
+        urlObject.searchParams.delete('Stock_to');
+
+        // Nếu giá trị mới của Stock_from khác null hoặc undefined, thêm giá trị mới vào URL
+        if (stockFromValue.trim() !== '') {
+            urlObject.searchParams.append('Stock_from', encodeURIComponent(stockFromValue));
+        }
+
+        // Nếu giá trị mới của Stock_to khác null hoặc undefined, thêm giá trị mới vào URL
+        if (stockToValue.trim() !== '') {
+            urlObject.searchParams.append('Stock_to', encodeURIComponent(stockToValue));
+        }
+
+        // Chuyển hướng trang đến URL mới
+        window.location.href = urlObject.href;
+    }
+
+    function handleFormSubmit() {
+        // Tránh chuyển hướng mặc định của form và thực hiện chuyển hướng theo ý muốn
+        handleStockInputChange();
+        return false;
+    }
+</script>
+
+<!-- Stock Filter Form -->
+<form class="d-flex flex-column flex-md-row mb-3" method="get" action="<?= base_url('product') ?>">
+    <div class="form-group mb-2">
+        <label class="py-2 pr-4 text-secondary">Stock :</label>
+    </div>
+    <div class="form-group mb-2">
+        <input type="text" class="form-control bg-white border-0" placeholder="From" name="Stock_from" value="<?= $StockFrom ?>">
+    </div>
+    <div class="form-group mb-2">
+        <h5 class="py-2 pr-4 text-secondary">-</h5>
+    </div>
+    <div class="form-group mb-2">
+        <input type="text" class="form-control bg-white border-0" placeholder="To" name="Stock_to" value="<?= $StockTo ?>" onchange="handleStockInputChange()">
+    </div>
+    <button type="submit" hidden class="btn btn-primary ml-md-2">Filter</button>
+</form>
+
     </div>
 </div>
 
 
 
     </nav>
-    <form action="/public/exportSelectedCSV" method="post">
+    <script>
+        function updateSelectedProductsAndPage() {
+    var selectedProducts = [];
+
+    // ... Code để cập nhật selectedProducts từ checkbox ...
+
+    // Lấy giá trị trang hiện tại từ tham số trên URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var currentPage = parseInt(urlParams.get('page')) || 1;
+
+    var dataToStore = {
+        selectedProducts: selectedProducts,
+        currentPage: currentPage
+    };
+
+    localStorage.setItem('exportData', JSON.stringify(dataToStore));
+}
+
+    </script>
+    <form action="/exportSelectedCSV" method="post">
     <div class="d-sm-flex align-items-center justify-content-between ">
         <h1 class=""></h1>
         <div class="">
@@ -278,7 +443,7 @@
                         $('.show-chart-modal').click(function () {
                             var sku = $(this).data('sku');
                             $.ajax({
-                                url: '/public/get-chart-data',
+                                url: '/get-chart-data',
                                 type: 'POST',
                                 data: {sku: sku},
                                 dataType: 'json',
@@ -358,7 +523,7 @@
                             <input type="checkbox" id="checkAll">
                         </th>
                         <th scope="col" class="text-muted" onclick="toggleSort('id')">
-                            <div style="display: flex; align-items: center;margin-bottom:-20px">
+                            <div style="display: flex; align-items: center;margin-bottom:-17px">
                                 <p style="width:20px;padding-top:20px">ID</p>
                                 <div id="sortIcon" class="sort-icon" style="margin-left: 5px;">
                                     <a href="<?= site_url('product?sort=asc&column=id'); ?>"><i
@@ -375,10 +540,10 @@
                         <th scope="col" class="text-muted">Vendor</th>
                         <th scope="col" class="text-muted">UPC</th>
                         <th scope="col" class="text-muted">Name</th>
-                        <th scope="col" class="text-muted">Short Description</th>
+                        <th scope="col" class="text-muted text-nowrap">Short Description</th>
                         <th scope="col" class="text-muted">Description</th>
                         <th scope="col" class="text-muted" onclick="toggleSort('price')">
-                            <div style="display: flex; align-items: center;margin-bottom:-20px">
+                            <div style="display: flex; align-items: center;margin-bottom:-17px">
                                 <p style="padding-top:20px">Price</p>
                                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
                                     <a href="<?= site_url('product?sort=asc&column=price'); ?>"><i
@@ -466,8 +631,8 @@
         <!-- Bao gồm thư viện Font Awesome (bạn có thể sử dụng phiên bản khác) -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <th scope="col" class="text-muted" onclick="toggleSort('shipping_fee')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Shipping Fee</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px" >
+                <p style="width:120%;padding-top:20px"  class=" text-nowrap">Shipping Fee</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
                     <a href="<?= site_url('product?sort=asc&column=shipping_fee'); ?>"><i
                             class="fas fa-sort-up"></i></a>
@@ -478,7 +643,7 @@
 
         </th>
         <th scope="col" class="text-muted" onclick="toggleSort('msrp')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">MSRP</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
                     <a href="<?= site_url('product?sort=asc&column=msrp'); ?>"><i
@@ -490,8 +655,8 @@
 
         </th>
         <th scope="col" class="text-muted" onclick="toggleSort('sale_price_1')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Sale Price 1</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Sale Price 1</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
                     <a href="<?= site_url('product?sort=asc&column=sale_price_1'); ?>"><i
                             class="fas fa-sort-up"></i></a>
@@ -503,8 +668,8 @@
         </th>
 
         <th scope="col" class="text-muted" onclick="toggleSort('sale_price_2')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Sale Price 2</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Sale Price 2</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=sale_price_2'); ?>"><i class="fas fa-sort-up "></i></a>
     <a href="<?= site_url('product?sort=desc&column=sale_price_2'); ?>"><i class="fas fa-sort-down "></i></a>
@@ -515,7 +680,7 @@
 
         </th>
         <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Profit</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -527,7 +692,7 @@
 
         </th>
         <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Weight</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -539,7 +704,7 @@
 
         </th>
         <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Length</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -550,7 +715,7 @@
             </div>
 
         </th>   <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Width</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -561,7 +726,7 @@
             </div>
 
         </th>   <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Depth</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -572,7 +737,7 @@
             </div>
 
         </th>   <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Height</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -583,8 +748,8 @@
             </div>
 
         </th>   <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Package Weight</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Package Weight</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
     <a href="<?= site_url('product?sort=desc&column=profit'); ?>"><i class="fas fa-sort-down "></i></a>
@@ -594,8 +759,8 @@
             </div>
 
         </th>   <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Package Length</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Package Length</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
     <a href="<?= site_url('product?sort=desc&column=profit'); ?>"><i class="fas fa-sort-down "></i></a>
@@ -605,8 +770,8 @@
             </div>
 
         </th>   <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Package Height</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Package Height</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
     <a href="<?= site_url('product?sort=desc&column=profit'); ?>"><i class="fas fa-sort-down "></i></a>
@@ -626,12 +791,12 @@
         
        
         <th scope="col" class="text-muted">Category</th>
-        <th scope="col" class="text-muted">Sub Category</th>
+        <th scope="col" class="text-muted text-nowrap" >Sub Category</th>
         <th scope="col" class="text-muted">Material</th>
         <th scope="col" class="text-muted">Color</th>
         <th scope="col" class="text-muted" onclick="toggleSort('profit')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Shipping Type</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Shipping Type</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=profit'); ?>"><i class="fas fa-sort-up "></i></a>
     <a href="<?= site_url('product?sort=desc&column=profit'); ?>"><i class="fas fa-sort-down "></i></a>
@@ -642,7 +807,7 @@
 
         </th>
         <th scope="col" class="text-muted" onclick="toggleSort('stock')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
                 <p style="width:120%;padding-top:20px">Stock</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=stock'); ?>"><i class="fas fa-sort-up "></i></a>
@@ -655,17 +820,17 @@
         </th>
        
        
-        <th scope="col" class="text-muted">Product URL</th>
+        <th scope="col" class="text-muted text-nowrap">Product URL</th>
 
-        <th scope="col" class="text-muted">Users Input</th>
-        <th scope="col" class="text-muted">Create Date</th>
-        <th scope="col" class="text-muted">Bucket Images</th>
-        <th scope="col" class="text-muted">Error Images</th>
+        <th scope="col" class="text-muted text-nowrap">Users Input</th>
+        <th scope="col" class="text-muted text-nowrap">Create Date</th>
+        <th scope="col" class="text-muted text-nowrap">Bucket Images</th>
+        <th scope="col" class="text-muted text-nowrap">Error Images</th>
         
        
         <th scope="col" class="text-muted" onclick="toggleSort('is_shopify')">
-            <div style="display: flex; align-items: center;margin-bottom:-20px">
-                <p style="width:120%;padding-top:20px">Is Shopify</p>
+            <div style="display: flex; align-items: center;margin-bottom:-17px">
+                <p style="width:120%;padding-top:20px" class="text-nowrap">Is Shopify</p>
                 <div id="sortIcon" class="sort-icon" style="margin-left: 10px;">
     <a href="<?= site_url('product?sort=asc&column=is_shopify'); ?>"><i class="fas fa-sort-up "></i></a>
     <a href="<?= site_url('product?sort=desc&column=is_shopify'); ?>"><i class="fas fa-sort-down "></i></a>
@@ -676,40 +841,81 @@
         </tr>
         </thead>
         <tbody>
+        <?php if (empty($products)) : ?>
+        <!-- Hiển thị thông báo khi không có sản phẩm -->
+        <tr>
+            <td colspan="30">
+               <h5 class="text-left">
+               Không có sản phẩm nào.
+               </h1></td>
+        </tr>
+    <?php else : ?>
             <?php foreach ($products as $product) : ?>
             
             <tr>
                 
             <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Lấy checkbox "Check All"
-        var checkAllCheckbox = document.getElementById('checkAll');
+document.addEventListener('DOMContentLoaded', function () {
+    var checkAllCheckbox = document.getElementById('checkAll');
+    var checkboxItems = document.querySelectorAll('.checkboxItem');
+    var currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
 
-        // Lấy tất cả các checkbox items
-        var checkboxItems = document.querySelectorAll('.checkboxItem');
+    function updateSelectedProducts() {
+        var selectedProducts = JSON.parse(sessionStorage.getItem('selectedProducts')) || {};
+        selectedProducts[currentPage] = [];
 
-        // Thêm sự kiện click cho checkbox "Check All"
-        checkAllCheckbox.addEventListener('click', function () {
-            // Lặp qua tất cả các checkbox items và đặt trạng thái checked của chúng
-            for (var i = 0; i < checkboxItems.length; i++) {
-                checkboxItems[i].checked = checkAllCheckbox.checked;
+        for (var i = 0; i < checkboxItems.length; i++) {
+            var checkbox = checkboxItems[i];
+            var productId = checkbox.getAttribute('data-id');
+
+            if (checkbox.checked) {
+                selectedProducts[currentPage].push(productId);
             }
+        }
+
+        sessionStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+    }
+
+    function loadSelectedProducts() {
+        var storedSelectedProducts = JSON.parse(sessionStorage.getItem('selectedProducts')) || {};
+        var selectedProducts = storedSelectedProducts[currentPage] || [];
+
+        for (var i = 0; i < checkboxItems.length; i++) {
+            var checkbox = checkboxItems[i];
+            var productId = checkbox.getAttribute('data-id');
+            checkbox.checked = selectedProducts.includes(productId);
+        }
+
+        checkAllCheckbox.checked = storedSelectedProducts['checkAll'] || false;
+    }
+
+    function checkAll() {
+        checkboxItems.forEach(function (checkbox) {
+            checkbox.checked = checkAllCheckbox.checked;
         });
 
-        // Thêm sự kiện click cho mỗi checkbox item
-        for (var i = 0; i < checkboxItems.length; i++) {
-            checkboxItems[i].addEventListener('click', function () {
-                // Kiểm tra xem có bao nhiêu checkbox được chọn
-                var checkedCount = document.querySelectorAll('.checkboxItem:checked').length;
+        updateSelectedProducts();
+    }
 
-                // Đặt trạng thái checked của checkbox "Check All" dựa trên số lượng checkbox được chọn
-                checkAllCheckbox.checked = checkedCount === checkboxItems.length;
-            });
-        }
+    checkboxItems.forEach(function (checkbox) {
+        checkbox.addEventListener('click', function () {
+            updateSelectedProducts();
+            checkAllCheckbox.checked = checkboxItems.length === document.querySelectorAll('.checkboxItem:checked').length;
+        });
     });
+
+    checkAllCheckbox.addEventListener('click', function () {
+        checkAll();
+    });
+
+    loadSelectedProducts();
+});
+
+
 </script>
 
-            <td><input class="checkboxItem" type="checkbox" name="selectedProducts[]" value="<?= $product['id']; ?>"></td>
+<td><input class="checkboxItem" type="checkbox" name="selectedProducts[]" value="<?= $product['id']; ?>" data-id="<?= $product['id']; ?>"></td>
+
             <!-- Các cột dữ liệu khác của sản phẩm -->
         
                 <td><?= $product['id'] ?></td>
@@ -721,7 +927,7 @@
                     <div class="col-lg-1">
                         <div class="image-container">
                             <img style="border-radius:20px" src="<?= $images[0] ?>" alt="Product Image" width="30"
-                                height="30">
+                                height="30" loading="lazy">
                         </div>
                     </div>
                     <?php endif; ?>
@@ -758,7 +964,7 @@
 
 
                 <!-- Thêm thuộc tính data-bs-toggle và data-bs-placement để kích hoạt Tooltip -->
-                <td class="text-multiline" data-bs-toggle="tooltip" data-bs-placement="top"
+                <td class="text-multiline" 
                     title="<?= $product['description'] ?>">
                     <?php
         $description = (strlen($product['description']) > 20) ? substr($product['description'], 0, 20) . '...' : $product['description'];
@@ -829,28 +1035,28 @@
                
             <?php endforeach; ?>
             <!-- Thêm dòng dữ liệu khác ở đây -->
+            <?php endif; ?>
         </tbody>
         </table>
         </form>
         <!-- phân trang -->
         <!-- Hiển thị thanh phân trang với nút -->
-
         <div class="row ">
             <div class="col-md-2">
                 <div class="py-5">
                     <div class="d-flex align-items-center">
-                        <div class="mr-2"> <span>Show: </span></div>
+                        <div class="mr-2"> <span><Strong>Show:</Strong> </span></div>
                         <div class="mr-2">
                             <div class="input-group">
                                 <form method="get" action="<?= base_url('product') ?>" id="perPageForm">
                                     <input  type="number" class="form-control text-center text-secondary" id="inputQuantity"
-                                        name="quantity" value="<?= $perPage ?>" min="1" style="max-width: 4rem"
+                                        name="quantity" value="<?= $perPage ?>" min="1" style="max-width: 3.2rem;max-height: 1.7rem"
                                         onchange="submitForm()">
                                         
                                 </form>
                             </div>
                         </div>
-                        <div> entries <span class="text-secondary"><?= $pager->getDetails()['total'] ?></span> of
+                        <div><strong>entries</strong>  <span class="text-secondary"><?= $pager->getDetails()['total'] ?></span> of
                             <?= $pager->getDetails()['total'] ?> </div>
                     </div>
                 </div>
@@ -871,7 +1077,6 @@
           
         </div>
     </div>
-
 
 
 
