@@ -58,29 +58,18 @@
     <!-- Topbar Search -->
     <script>
     function handleSearchInputChange() {
-        // Lấy giá trị của trường searchItem
+  
         var searchValue = document.getElementsByName('searchItem')[0].value;
-
-        // Lấy URL hiện tại của trang
         var currentUrl = window.location.href;
-
-        // Tạo một đối tượng URL từ URL hiện tại
         var urlObject = new URL(currentUrl);
-
-        // Xóa tham số searchItem hiện tại trong URL
         urlObject.searchParams.delete('searchItem');
-
-        // Nếu giá trị mới của searchItem khác null hoặc undefined, thêm giá trị mới vào URL
         if (searchValue.trim() !== '') {
             urlObject.searchParams.append('searchItem', encodeURIComponent(searchValue));
         }
-
-        // Chuyển hướng trang đến URL mới
         window.location.href = urlObject.href;
     }
 
     function handleSearchFormSubmit() {
-        // Tránh chuyển hướng mặc định của form và thực hiện chuyển hướng theo ý muốn
         handleSearchInputChange();
         return false;
     }
@@ -119,21 +108,12 @@
 
     </select>
 </div>
-
-
-                <!-- Thêm mã JavaScript -->
-
-                <!-- Add Select2 CSS and JS files -->
                 <script>
-                // Hàm xử lý khi một mục trong dropdown sub_category được chọn
+
                 function handleSubCategoryDropdownSelection1(value) {
     var currentUrl = window.location.href;
     var urlObject = new URL(currentUrl);
-
-    // Xóa tất cả các tham số sub_category hiện tại trong URL
     urlObject.searchParams.delete('sub_category');
-
-    // Thêm giá trị mới của sub_category vào URL
     urlObject.searchParams.append('sub_category', encodeURIComponent(value));
 
     console.log("New URL:", urlObject.href);
@@ -144,13 +124,8 @@
 function handleCategoryDropdownSelection1(value) {
     var currentUrl = window.location.href;
     var urlObject = new URL(currentUrl);
-
-    // Xóa tất cả các tham số category hiện tại trong URL
     urlObject.searchParams.delete('category');
-
-    // Thêm giá trị mới của category vào URL
     urlObject.searchParams.append('category', encodeURIComponent(value));
-
     window.location.href = urlObject.href;
 }
 
@@ -158,18 +133,11 @@ function handleCategoryDropdownSelection1(value) {
 
 
                 <div class="col-md-3 ">
-                    <!-- Topbar Search -->
-                    <!-- Thêm mã JavaScript -->
                     <script>
-                    // Hàm xử lý khi một mục trong dropdown nhà cung cấp được chọn
                     function handleVendorDropdownSelection(value) {
     var currentUrl = window.location.href;
     var urlObject = new URL(currentUrl);
-
-    // Xóa tất cả các tham số vendor hiện tại trong URL
     urlObject.searchParams.delete('vendor');
-
-    // Thêm giá trị mới của vendor vào URL
     urlObject.searchParams.append('vendor', encodeURIComponent(value));
 
     window.location.href = urlObject.href;
@@ -242,43 +210,26 @@ function handleCategoryDropdownSelection1(value) {
     <div class="col-md-6">
     <script>
     function handlePriceInputChange() {
-        // Lấy giá trị của các trường price_from và price_to
         var priceFromValue = document.getElementsByName('price_from')[0].value;
         var priceToValue = document.getElementsByName('price_to')[0].value;
-
-        // Lấy URL hiện tại của trang
         var currentUrl = window.location.href;
-
-        // Tạo một đối tượng URL từ URL hiện tại
         var urlObject = new URL(currentUrl);
-
-        // Xóa tất cả các tham số price hiện tại trong URL
         urlObject.searchParams.delete('price_from');
         urlObject.searchParams.delete('price_to');
-
-        // Nếu giá trị mới của price_from khác null hoặc undefined, thêm giá trị mới vào URL
         if (priceFromValue.trim() !== '') {
             urlObject.searchParams.append('price_from', encodeURIComponent(priceFromValue));
         }
-
-        // Nếu giá trị mới của price_to khác null hoặc undefined, thêm giá trị mới vào URL
         if (priceToValue.trim() !== '') {
             urlObject.searchParams.append('price_to', encodeURIComponent(priceToValue));
         }
-
-        // Chuyển hướng trang đến URL mới
         window.location.href = urlObject.href;
     }
 
     function handleFormSubmit() {
-        // Tránh chuyển hướng mặc định của form và thực hiện chuyển hướng theo ý muốn
         handlePriceInputChange();
         return false;
     }
 </script>
-
-        <!-- Price Filter Form -->
-      <!-- Price Filter Form -->
 <form class="d-flex flex-column flex-md-row mb-3" method="get" action="<?= base_url('product') ?>">
     <div class="form-group mb-2">
         <label class="py-2 pr-4 text-secondary">Price :</label>
@@ -302,36 +253,22 @@ function handleCategoryDropdownSelection1(value) {
         <!-- Stock Filter Form -->
         <script>
     function handleStockInputChange() {
-        // Lấy giá trị của các trường Stock_from và Stock_to
         var stockFromValue = document.getElementsByName('Stock_from')[0].value;
         var stockToValue = document.getElementsByName('Stock_to')[0].value;
-
-        // Lấy URL hiện tại của trang
         var currentUrl = window.location.href;
-
-        // Tạo một đối tượng URL từ URL hiện tại
         var urlObject = new URL(currentUrl);
-
-        // Xóa tất cả các tham số Stock hiện tại trong URL
         urlObject.searchParams.delete('Stock_from');
         urlObject.searchParams.delete('Stock_to');
-
-        // Nếu giá trị mới của Stock_from khác null hoặc undefined, thêm giá trị mới vào URL
         if (stockFromValue.trim() !== '') {
             urlObject.searchParams.append('Stock_from', encodeURIComponent(stockFromValue));
         }
-
-        // Nếu giá trị mới của Stock_to khác null hoặc undefined, thêm giá trị mới vào URL
         if (stockToValue.trim() !== '') {
             urlObject.searchParams.append('Stock_to', encodeURIComponent(stockToValue));
         }
-
-        // Chuyển hướng trang đến URL mới
         window.location.href = urlObject.href;
     }
 
     function handleFormSubmit() {
-        // Tránh chuyển hướng mặc định của form và thực hiện chuyển hướng theo ý muốn
         handleStockInputChange();
         return false;
     }
@@ -363,10 +300,6 @@ function handleCategoryDropdownSelection1(value) {
     <script>
         function updateSelectedProductsAndPage() {
     var selectedProducts = [];
-
-    // ... Code để cập nhật selectedProducts từ checkbox ...
-
-    // Lấy giá trị trang hiện tại từ tham số trên URL
     var urlParams = new URLSearchParams(window.location.search);
     var currentPage = parseInt(urlParams.get('page')) || 1;
 
@@ -460,9 +393,7 @@ function handleCategoryDropdownSelection1(value) {
                         function updateModalContent(data) {
                             $('#numberOfDays').text(data.importDates.length);
                             
-                            // Kiểm tra xem biểu đồ đã được tạo chưa
                             if (chart) {
-                                // Nếu đã tồn tại, hủy biểu đồ hiện tại trước khi tạo một biểu đồ mới
                                 chart.destroy();
                             }
                     
@@ -556,35 +487,22 @@ function handleCategoryDropdownSelection1(value) {
                         </th>
                         <script>
                         function toggleSort(column) {
-                            // Lấy thẻ biểu tượng của cột được click
                             var sortIcon = document.getElementById('sortIcon' + column);
-
-                            // Đặt tất cả các icon về trạng thái không được chọn
                             var allIcons = document.querySelectorAll('.sort-icon');
                             allIcons.forEach(function(icon) {
                                 icon.classList.remove('asc', 'desc');
                             });
-
-                            // Kiểm tra trạng thái sắp xếp hiện tại và thay đổi
                             if (sortIcon.classList.contains('asc')) {
                                 sortIcon.classList.remove('asc');
                                 sortIcon.classList.add('desc');
                                 sortIcon.querySelector('.fa-sort-up').style.color = '#555';
                                 sortIcon.querySelector('.fa-sort-down').style.color = '#f00';
-                                // Thực hiện hành động sắp xếp giảm dần
-                                // ...
-
-                                // Gửi yêu cầu sắp xếp đến server hoặc thực hiện sắp xếp ngay tại đây
                                 sortData(column, 'desc');
                             } else {
                                 sortIcon.classList.remove('desc');
                                 sortIcon.classList.add('asc');
                                 sortIcon.querySelector('.fa-sort-up').style.color = '#0f0';
                                 sortIcon.querySelector('.fa-sort-down').style.color = '#555';
-                                // Thực hiện hành động sắp xếp tăng dần
-                                // ...
-
-                                // Gửi yêu cầu sắp xếp đến server hoặc thực hiện sắp xếp ngay tại đây
                                 sortData(column, 'asc');
                             }
                         }
@@ -610,25 +528,22 @@ function handleCategoryDropdownSelection1(value) {
             margin: -11.7px;
             padding-top: 4px;
             font-size: 13.5px;
-            /* Khoảng cách giữa hai biểu tượng */
+        
         }
 
         #sortIcon a i {
             color: #555;
-            /* Màu mặc định cho biểu tượng chưa được chọn */
+        
         }
 
         #sortIcon a.asc i {
             color: #0f0;
-            /* Màu khi được sắp xếp tăng dần */
         }
 
         #sortIcon a.desc i {
             color: #f00;
-            /* Màu khi được sắp xếp giảm dần */
         }
         </style>
-        <!-- Bao gồm thư viện Font Awesome (bạn có thể sử dụng phiên bản khác) -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <th scope="col" class="text-muted" onclick="toggleSort('shipping_fee')">
             <div style="display: flex; align-items: center;margin-bottom:-17px" >
@@ -974,24 +889,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 <style>
                 .tooltip-inner {
                     background-color: #ffcc00;
-                    /* Đổi màu nền của Tooltip */
+               
                     color: #333;
-                    /* Đổi màu chữ của Tooltip */
+               
                 }
 
                 .text-muted {
                     white-space: nowrap;
-                    /* Ngăn chặn xuống dòng */
+        
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    /* Hiển thị chấm ba chấm khi dữ liệu bị cắt ngắn */
+                
                 }
                 </style>
-                <!-- Kích hoạt Tooltip bằng JavaScript -->
+            
                 <script>
-                // Đợi cho trang tải xong
+    
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Kích hoạt Tooltip cho tất cả phần tử có thuộc tính data-bs-toggle="tooltip"
                     var tooltipTriggerList = [].slice.call(document.querySelectorAll(
                         '[data-bs-toggle="tooltip"]'));
                     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -1062,7 +976,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
             <script>
-            // Hàm để tự động submit biểu mẫu khi giá trị thay đổi
             function submitForm() {
     document.getElementById('perPageForm').submit();
     return false;
